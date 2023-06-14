@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html ng-app="ShoppingListApp">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Check Off Shopping List</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js"></script>
+
+</head>
+
+<body ng-controller="ShoppingListController as shoppingList">
+  <h2>To Buy:</h2>
+  <ul>
+    <li ng-repeat="item in shoppingList.toBuyItems">
+      Buy {{item.quantity}} {{item.name}}
+      <button ng-click="shoppingList.buyItem($index)">Bought</button>
+    </li>
+  </ul>
+
+  <h2>Already Bought:</h2>
+  <ul>
+    <li ng-if="shoppingList.alreadyBoughtItems.length === 0">Nothing bought yet.</li>
+    <li ng-repeat="item in shoppingList.alreadyBoughtItems">Bought {{item.quantity}} {{item.name}}</li>
+  </ul>
+
+  <p ng-if="shoppingList.toBuyItems.length === 0">Everything is bought!</p>
+</body>
+<script>
+  angular.module('ShoppingListApp', [])
+  .controller('ShoppingListController', ShoppingListController);
+
+ShoppingListController.$inject = [];
+
+function ShoppingListController() {
+  var shoppingList = this;
+
+  // Initial shopping list items
+  shoppingList.toBuyItems = [
+    { name: 'Cookies', quantity: 10 },
+    { name: 'Milk', quantity: 2 },
+    { name: 'Bread', quantity: 1 },
+    { name: 'Eggs', quantity: 12 },
+    { name: 'Apples', quantity: 6 }
+  ];
+
+  shoppingList.alreadyBoughtItems = [];
+
+  shoppingList.buyItem = function (index) {
+    var boughtItem = shoppingList.toBuyItems.splice(index, 1)[0];
+    shoppingList.alreadyBoughtItems.push(boughtItem);
+  };
+}
+</script>
+</html>
